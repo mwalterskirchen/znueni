@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="znueni/Assets.xcassets/AppIcon.appiconset/icon_128x128.png" width="80" alt="znueni app icon">
+</p>
+
 # znueni ⏲️🇨🇭🥐
 
 A minimal macOS menu bar Pomodoro timer. Named after the Swiss German tradition of _Znüni_ — a mid-morning break to recharge.
