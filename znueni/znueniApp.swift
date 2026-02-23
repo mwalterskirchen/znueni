@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 @main
 struct znueniApp: App {
@@ -16,14 +17,35 @@ struct znueniApp: App {
             case .idle:
                 Button("Start Focus") { timer.startFocus() }
             case .focus:
+                if timer.isPaused {
+                    Button("Resume") { timer.resume() }
+                } else {
+                    Button("Pause") { timer.pause() }
+                }
                 Button("Stop Focus") { timer.stopFocus() }
             case .focusEnded:
-                Button("Start Break") { timer.startBreak() }
+                if timer.isLongBreak {
+                    Button("Start Long Break") { timer.startBreak() }
+                } else {
+                    Button("Start Break") { timer.startBreak() }
+                }
                 Button("Skip") { timer.skipBreak() }
             case .breaking:
+                if timer.isPaused {
+                    Button("Resume") { timer.resume() }
+                } else {
+                    Button("Pause") { timer.pause() }
+                }
                 Button("End Break") { timer.endBreak() }
             case .breakEnded:
                 Button("Start Focus") { timer.startFocus() }
+            }
+
+            if timer.completedSessions > 0 {
+                Divider()
+                Text("Sessions: \(timer.completedSessions)")
+                    .disabled(true)
+                Button("Reset Sessions") { timer.resetSessions() }
             }
 
             Divider()
@@ -45,6 +67,22 @@ struct znueniApp: App {
                         ))
                     }
                 }
+                Menu("Long Break: \(timer.longBreakDuration) min") {
+                    ForEach(TimerState.longBreakOptions, id: \.self) { mins in
+                        Toggle("\(mins) min", isOn: Binding(
+                            get: { timer.longBreakDuration == mins },
+                            set: { if $0 { timer.longBreakDuration = mins } }
+                        ))
+                    }
+                }
+                Menu("Long Break Every: \(timer.sessionsUntilLongBreak)") {
+                    ForEach(TimerState.sessionsUntilLongBreakOptions, id: \.self) { n in
+                        Toggle("\(n) sessions", isOn: Binding(
+                            get: { timer.sessionsUntilLongBreak == n },
+                            set: { if $0 { timer.sessionsUntilLongBreak = n } }
+                        ))
+                    }
+                }
                 Toggle("Auto-start break", isOn: Bindable(timer).autoStartBreak)
             }
 
@@ -58,7 +96,10 @@ struct znueniApp: App {
             if timer.phase == .idle {
                 Image("croissant")
             } else {
-                Text(timer.menuBarTitle)
+                Image(nsImage: makeMenuBarImage(
+                    progress: timer.progress,
+                    text: timer.menuBarTitle
+                ))
             }
         }
         .menuBarExtraStyle(.menu)
@@ -66,5 +107,54 @@ struct znueniApp: App {
 
     init() {
         TimerState.requestNotificationPermission()
+    }
+
+    private func makeMenuBarImage(progress: Double, text: String) -> NSImage {
+        let fontSize: CGFloat = 12
+        let font = NSFont.monospacedDigitSystemFont(ofSize: fontSize, weight: .medium)
+        let attrs: [NSAttributedString.Key: Any] = [.font: font]
+        let textSize = (text as NSString).size(withAttributes: attrs)
+
+        let arcDiameter: CGFloat = 16
+        let spacing: CGFloat = 4
+        let height: CGFloat = 18
+        let width = arcDiameter + spacing + textSize.width + 2
+
+        let image = NSImage(size: NSSize(width: width, height: height), flipped: false) { rect in
+            // Arc
+            let arcCenter = CGPoint(x: arcDiameter / 2, y: rect.midY)
+            let radius = arcDiameter / 2 - 1.5
+            let startAngle: CGFloat = 90
+            let endAngle = 90 - CGFloat(progress) * 360
+
+            // Track
+            let track = NSBezierPath()
+            track.appendArc(withCenter: arcCenter, radius: radius, startAngle: 0, endAngle: 360)
+            NSColor.labelColor.withAlphaComponent(0.2).setStroke()
+            track.lineWidth = 2
+            track.stroke()
+
+            // Progress arc
+            if progress > 0 {
+                let arc = NSBezierPath()
+                arc.appendArc(withCenter: arcCenter, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+                NSColor.labelColor.setStroke()
+                arc.lineWidth = 2
+                arc.lineCapStyle = .round
+                arc.stroke()
+            }
+
+            // Text
+            let textOrigin = CGPoint(x: arcDiameter + spacing, y: (height - textSize.height) / 2)
+            (text as NSString).draw(at: textOrigin, withAttributes: [
+                .font: font,
+                .foregroundColor: NSColor.labelColor
+            ])
+
+            return true
+        }
+
+        image.isTemplate = true
+        return image
     }
 }
