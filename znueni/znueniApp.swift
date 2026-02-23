@@ -24,6 +24,7 @@ struct znueniApp: App {
                 } else {
                     Button("Pause") { timer.pause() }
                 }
+                Button("Skip") { timer.skipFocus() }
                 Button("Stop Focus") { timer.stopFocus() }
             case .focusEnded:
                 if timer.isLongBreak {
@@ -38,7 +39,7 @@ struct znueniApp: App {
                 } else {
                     Button("Pause") { timer.pause() }
                 }
-                Button("End Break") { timer.endBreak() }
+                Button("Skip") { timer.endBreak() }
             case .breakEnded:
                 Button("Start Focus") { timer.startFocus() }
             }

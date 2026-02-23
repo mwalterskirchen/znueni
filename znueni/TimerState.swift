@@ -157,6 +157,17 @@ class TimerState {
         startTicking()
     }
 
+    func skipFocus() {
+        stopTicking()
+        isPaused = false
+        completedSessions += 1
+        if autoStartBreak {
+            startBreak()
+        } else {
+            phase = .focusEnded
+        }
+    }
+
     func stopFocus() {
         stopTicking()
         isPaused = false
