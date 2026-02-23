@@ -73,6 +73,7 @@ struct MenuBarView: View {
                         .textFieldStyle(.roundedBorder)
                     Text("min")
                 }
+                Toggle("Auto-start break", isOn: $timer.autoStartBreak)
             }
             .padding(.top, 4)
         }

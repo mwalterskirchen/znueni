@@ -22,6 +22,11 @@ class TimerState {
         set { UserDefaults.standard.set(newValue, forKey: "breakDuration") }
     }
 
+    var autoStartBreak: Bool {
+        get { UserDefaults.standard.object(forKey: "autoStartBreak") as? Bool ?? true }
+        set { UserDefaults.standard.set(newValue, forKey: "autoStartBreak") }
+    }
+
     var menuBarTitle: String {
         switch phase {
         case .idle: "znueni"
@@ -83,9 +88,13 @@ class TimerState {
             stopTicking()
             switch phase {
             case .focus:
-                phase = .focusEnded
                 NSSound(named: "Glass")?.play()
                 sendNotification(title: "Focus ended", body: "Time for a break!")
+                if autoStartBreak {
+                    startBreak()
+                } else {
+                    phase = .focusEnded
+                }
             case .breaking:
                 phase = .breakEnded
                 NSSound(named: "Purr")?.play()
