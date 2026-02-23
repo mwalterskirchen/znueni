@@ -93,7 +93,7 @@ final class TimerStateTests: XCTestCase {
     }
 
     func testFocusCompleteIncrementsSessions() {
-        sut.autoStartBreak = false
+        sut.autoStartNext = false
         sut.startFocus()
         sut.remainingSeconds = 1
         sut.tick()
@@ -101,8 +101,8 @@ final class TimerStateTests: XCTestCase {
         XCTAssertEqual(sut.phase, .focusEnded)
     }
 
-    func testFocusCompleteAutoStartBreak() {
-        sut.autoStartBreak = true
+    func testFocusCompleteAutoStartNext() {
+        sut.autoStartNext = true
         sut.startFocus()
         sut.remainingSeconds = 1
         sut.tick()
@@ -110,7 +110,16 @@ final class TimerStateTests: XCTestCase {
         XCTAssertEqual(sut.phase, .breaking)
     }
 
-    func testBreakCompleteTransitionsToBreakEnded() {
+    func testBreakCompleteAutoStartNextStartsFocus() {
+        sut.autoStartNext = true
+        sut.startBreak()
+        sut.remainingSeconds = 1
+        sut.tick()
+        XCTAssertEqual(sut.phase, .focus)
+    }
+
+    func testBreakCompleteWithoutAutoStartNextTransitionsToBreakEnded() {
+        sut.autoStartNext = false
         sut.startBreak()
         sut.remainingSeconds = 1
         sut.tick()
@@ -247,7 +256,7 @@ final class TimerStateTests: XCTestCase {
         XCTAssertEqual(sut.sessionsUntilLongBreak, 4)
     }
 
-    func testDefaultAutoStartBreak() {
-        XCTAssertTrue(sut.autoStartBreak)
+    func testDefaultAutoStartNext() {
+        XCTAssertTrue(sut.autoStartNext)
     }
 }

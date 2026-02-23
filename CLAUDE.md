@@ -34,7 +34,7 @@ State flow: `idle → focus → focusEnded → breaking → breakEnded → idle`
 
 ## Patterns
 
-- Settings (focusDuration, breakDuration, longBreakDuration, sessionsUntilLongBreak, autoStartBreak) use UserDefaults with Observable `access()`/`withMutation()` wrappers
+- Settings (focusDuration, breakDuration, longBreakDuration, sessionsUntilLongBreak, autoStartNext) use UserDefaults with Observable `access()`/`withMutation()` wrappers
 - DEBUG builds include 1-min durations for testing; RELEASE starts at 15 min
 - `formatTime()` is a top-level function in TimerState.swift (shared by overlay view)
 - `Int.clamped(min:fallback:)` private extension for safe UserDefaults reads

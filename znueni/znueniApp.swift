@@ -86,7 +86,7 @@ struct znueniApp: App {
                         ))
                     }
                 }
-                Toggle("Auto-start break", isOn: Bindable(timer).autoStartBreak)
+                Toggle("Auto-start next session", isOn: Bindable(timer).autoStartNext)
                 Toggle("Launch at login", isOn: Binding(
                     get: { launchAtLogin },
                     set: { newValue in

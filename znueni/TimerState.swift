@@ -34,7 +34,7 @@ class TimerState {
     private enum Keys {
         static let focusDuration = "focusDuration"
         static let breakDuration = "breakDuration"
-        static let autoStartBreak = "autoStartBreak"
+        static let autoStartNext = "autoStartNext"
         static let completedSessions = "completedSessions"
         static let longBreakDuration = "longBreakDuration"
         static let sessionsUntilLongBreak = "sessionsUntilLongBreak"
@@ -69,14 +69,14 @@ class TimerState {
         }
     }
 
-    var autoStartBreak: Bool {
+    var autoStartNext: Bool {
         get {
-            access(keyPath: \.autoStartBreak)
-            return defaults.object(forKey: Keys.autoStartBreak) as? Bool ?? true
+            access(keyPath: \.autoStartNext)
+            return defaults.object(forKey: Keys.autoStartNext) as? Bool ?? true
         }
         set {
-            withMutation(keyPath: \.autoStartBreak) {
-                defaults.set(newValue, forKey: Keys.autoStartBreak)
+            withMutation(keyPath: \.autoStartNext) {
+                defaults.set(newValue, forKey: Keys.autoStartNext)
             }
         }
     }
@@ -161,7 +161,7 @@ class TimerState {
         stopTicking()
         isPaused = false
         completedSessions += 1
-        if autoStartBreak {
+        if autoStartNext {
             startBreak()
         } else {
             phase = .focusEnded
@@ -236,16 +236,20 @@ class TimerState {
                 completedSessions += 1
                 NSSound(named: "Glass")?.play()
                 sendNotification(title: "Focus ended", body: "Time for a break!")
-                if autoStartBreak {
+                if autoStartNext {
                     startBreak()
                 } else {
                     phase = .focusEnded
                 }
             case .breaking:
-                phase = .breakEnded
                 NSSound(named: "Purr")?.play()
                 overlayController.dismiss()
                 sendNotification(title: "Break ended", body: "Ready to focus again?")
+                if autoStartNext {
+                    startFocus()
+                } else {
+                    phase = .breakEnded
+                }
             default:
                 break
             }
