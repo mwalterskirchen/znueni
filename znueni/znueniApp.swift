@@ -31,12 +31,18 @@ struct znueniApp: App {
             Menu("Settings") {
                 Menu("Focus: \(timer.focusDuration) min") {
                     ForEach([1, 15, 25, 30, 45, 60], id: \.self) { mins in
-                        Button("\(mins) min") { timer.focusDuration = mins }
+                        Toggle("\(mins) min", isOn: Binding(
+                            get: { timer.focusDuration == mins },
+                            set: { if $0 { timer.focusDuration = mins } }
+                        ))
                     }
                 }
                 Menu("Break: \(timer.breakDuration) min") {
                     ForEach([1, 3, 5, 10, 15], id: \.self) { mins in
-                        Button("\(mins) min") { timer.breakDuration = mins }
+                        Toggle("\(mins) min", isOn: Binding(
+                            get: { timer.breakDuration == mins },
+                            set: { if $0 { timer.breakDuration = mins } }
+                        ))
                     }
                 }
                 Toggle("Auto-start break", isOn: Bindable(timer).autoStartBreak)
