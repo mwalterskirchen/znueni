@@ -2,7 +2,7 @@
 
 A minimal macOS menu bar Pomodoro timer. Free, open source, and lightweight with zero dependencies in just a few hundred lines of Swift.
 
-Named after _Znüni_ (sounds like "tsnoo-nee"), a Swiss German tradition of taking a small snack break around 9 AM — literally "at nine o'clock".
+Named after _Znüni_ (sounds like "tsnoo-nee"), a Swiss German tradition of taking a small snack break around 9 AM. Literally "at nine o'clock".
 
 ## Features
 
