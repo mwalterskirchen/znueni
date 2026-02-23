@@ -185,7 +185,14 @@ class TimerState {
     }
 
     func skipBreak() {
-        phase = .idle
+        stopTicking()
+        isPaused = false
+        overlayController.dismiss()
+        if autoStartNext {
+            startFocus()
+        } else {
+            phase = .breakEnded
+        }
     }
 
     func endBreak() {

@@ -122,7 +122,7 @@ private struct MenuContent: View {
             } else {
                 Button("Pause") { timer.pause() }
             }
-            Button("Skip") { timer.endBreak() }
+            Button("Skip") { timer.skipBreak() }
         case .breakEnded:
             Button("Start Focus") { timer.startFocus() }
         }
