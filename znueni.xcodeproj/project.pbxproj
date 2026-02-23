@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		50D271302F4C8A0000F7FA36 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 50D2710A2F4C879700F7FA36 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 50D271112F4C879700F7FA36;
+			remoteInfo = znueni;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		50D271122F4C879700F7FA36 /* znueni.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = znueni.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		50D271282F4C8A0000F7FA36 /* znueniTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = znueniTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +27,22 @@
 			path = znueni;
 			sourceTree = "<group>";
 		};
+		50D271322F4C8A0000F7FA36 /* znueniTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = znueniTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		50D2710F2F4C879700F7FA36 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		50D271252F4C8A0000F7FA36 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				50D271142F4C879700F7FA36 /* znueni */,
+				50D271322F4C8A0000F7FA36 /* znueniTests */,
 				50D271132F4C879700F7FA36 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				50D271122F4C879700F7FA36 /* znueni.app */,
+				50D271282F4C8A0000F7FA36 /* znueniTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,6 +95,27 @@
 			productReference = 50D271122F4C879700F7FA36 /* znueni.app */;
 			productType = "com.apple.product-type.application";
 		};
+		50D271272F4C8A0000F7FA36 /* znueniTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 50D271332F4C8A0000F7FA36 /* Build configuration list for PBXNativeTarget "znueniTests" */;
+			buildPhases = (
+				50D271242F4C8A0000F7FA36 /* Sources */,
+				50D271252F4C8A0000F7FA36 /* Frameworks */,
+				50D271262F4C8A0000F7FA36 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				50D271312F4C8A0000F7FA36 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				50D271322F4C8A0000F7FA36 /* znueniTests */,
+			);
+			name = znueniTests;
+			productName = znueniTests;
+			productReference = 50D271282F4C8A0000F7FA36 /* znueniTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -82,6 +128,10 @@
 				TargetAttributes = {
 					50D271112F4C879700F7FA36 = {
 						CreatedOnToolsVersion = 26.2;
+					};
+					50D271272F4C8A0000F7FA36 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 50D271112F4C879700F7FA36;
 					};
 				};
 			};
@@ -100,12 +150,20 @@
 			projectRoot = "";
 			targets = (
 				50D271112F4C879700F7FA36 /* znueni */,
+				50D271272F4C8A0000F7FA36 /* znueniTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		50D271102F4C879700F7FA36 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		50D271262F4C8A0000F7FA36 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +180,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		50D271242F4C8A0000F7FA36 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		50D271312F4C8A0000F7FA36 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 50D271112F4C879700F7FA36 /* znueni */;
+			targetProxy = 50D271302F4C8A0000F7FA36 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		50D2711B2F4C879700F7FA36 /* Debug */ = {
@@ -307,6 +380,44 @@
 			};
 			name = Release;
 		};
+		50D271342F4C8A0000F7FA36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.mwalterskirchen.znueniTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/znueni.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/znueni";
+			};
+			name = Debug;
+		};
+		50D271352F4C8A0000F7FA36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.mwalterskirchen.znueniTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/znueni.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/znueni";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -324,6 +435,15 @@
 			buildConfigurations = (
 				50D2711E2F4C879700F7FA36 /* Debug */,
 				50D2711F2F4C879700F7FA36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		50D271332F4C8A0000F7FA36 /* Build configuration list for PBXNativeTarget "znueniTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				50D271342F4C8A0000F7FA36 /* Debug */,
+				50D271352F4C8A0000F7FA36 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

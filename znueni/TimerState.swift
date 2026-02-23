@@ -15,6 +15,11 @@ func formatTime(_ seconds: Int) -> String {
 @Observable
 @MainActor
 class TimerState {
+    let defaults: UserDefaults
+
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+    }
     #if DEBUG
     static let focusOptions = [1, 15, 25, 30, 45, 60]
     static let breakOptions = [1, 3, 5, 10, 15]
@@ -43,11 +48,11 @@ class TimerState {
     var focusDuration: Int {
         get {
             access(keyPath: \.focusDuration)
-            return UserDefaults.standard.integer(forKey: Keys.focusDuration).clamped(min: 1, fallback: 25)
+            return defaults.integer(forKey: Keys.focusDuration).clamped(min: 1, fallback: 25)
         }
         set {
             withMutation(keyPath: \.focusDuration) {
-                UserDefaults.standard.set(newValue, forKey: Keys.focusDuration)
+                defaults.set(newValue, forKey: Keys.focusDuration)
             }
         }
     }
@@ -55,11 +60,11 @@ class TimerState {
     var breakDuration: Int {
         get {
             access(keyPath: \.breakDuration)
-            return UserDefaults.standard.integer(forKey: Keys.breakDuration).clamped(min: 1, fallback: 5)
+            return defaults.integer(forKey: Keys.breakDuration).clamped(min: 1, fallback: 5)
         }
         set {
             withMutation(keyPath: \.breakDuration) {
-                UserDefaults.standard.set(newValue, forKey: Keys.breakDuration)
+                defaults.set(newValue, forKey: Keys.breakDuration)
             }
         }
     }
@@ -67,11 +72,11 @@ class TimerState {
     var autoStartBreak: Bool {
         get {
             access(keyPath: \.autoStartBreak)
-            return UserDefaults.standard.object(forKey: Keys.autoStartBreak) as? Bool ?? true
+            return defaults.object(forKey: Keys.autoStartBreak) as? Bool ?? true
         }
         set {
             withMutation(keyPath: \.autoStartBreak) {
-                UserDefaults.standard.set(newValue, forKey: Keys.autoStartBreak)
+                defaults.set(newValue, forKey: Keys.autoStartBreak)
             }
         }
     }
@@ -79,11 +84,11 @@ class TimerState {
     var completedSessions: Int {
         get {
             access(keyPath: \.completedSessions)
-            return UserDefaults.standard.integer(forKey: Keys.completedSessions)
+            return defaults.integer(forKey: Keys.completedSessions)
         }
         set {
             withMutation(keyPath: \.completedSessions) {
-                UserDefaults.standard.set(newValue, forKey: Keys.completedSessions)
+                defaults.set(newValue, forKey: Keys.completedSessions)
             }
         }
     }
@@ -91,11 +96,11 @@ class TimerState {
     var longBreakDuration: Int {
         get {
             access(keyPath: \.longBreakDuration)
-            return UserDefaults.standard.integer(forKey: Keys.longBreakDuration).clamped(min: 1, fallback: 15)
+            return defaults.integer(forKey: Keys.longBreakDuration).clamped(min: 1, fallback: 15)
         }
         set {
             withMutation(keyPath: \.longBreakDuration) {
-                UserDefaults.standard.set(newValue, forKey: Keys.longBreakDuration)
+                defaults.set(newValue, forKey: Keys.longBreakDuration)
             }
         }
     }
@@ -103,11 +108,11 @@ class TimerState {
     var sessionsUntilLongBreak: Int {
         get {
             access(keyPath: \.sessionsUntilLongBreak)
-            return UserDefaults.standard.integer(forKey: Keys.sessionsUntilLongBreak).clamped(min: 2, fallback: 4)
+            return defaults.integer(forKey: Keys.sessionsUntilLongBreak).clamped(min: 2, fallback: 4)
         }
         set {
             withMutation(keyPath: \.sessionsUntilLongBreak) {
-                UserDefaults.standard.set(newValue, forKey: Keys.sessionsUntilLongBreak)
+                defaults.set(newValue, forKey: Keys.sessionsUntilLongBreak)
             }
         }
     }
@@ -209,7 +214,7 @@ class TimerState {
         timer = nil
     }
 
-    private func tick() {
+    func tick() {
         guard remainingSeconds > 0 else { return }
         remainingSeconds -= 1
         if remainingSeconds == 0 {
