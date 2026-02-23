@@ -109,10 +109,10 @@ private struct SettingsButton: View {
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
-        Button("Settings…") {
+        Button {
             openWindow(id: "settings")
             NSApp.activate(ignoringOtherApps: true)
-        }
+        } label: { Label("Settings…", systemImage: "gear") }
         .keyboardShortcut(",")
     }
 }
@@ -135,37 +135,36 @@ private struct MenuContent: View {
         Divider()
         switch timer.phase {
         case .idle:
-            Button("Start Focus") { timer.startFocus() }
+            Button { timer.startFocus() } label: { Label("Start Focus", systemImage: "play.fill") }
         case .focus:
             if timer.isPaused {
-                Button("Resume") { timer.resume() }
+                Button { timer.resume() } label: { Label("Resume", systemImage: "play.fill") }
             } else {
-                Button("Pause") { timer.pause() }
+                Button { timer.pause() } label: { Label("Pause", systemImage: "pause.fill") }
             }
-            Button("Skip") { timer.skipFocus() }
-            Button("Stop Focus") { timer.stopFocus() }
+            Button { timer.skipFocus() } label: { Label("Skip", systemImage: "forward.end.fill") }
+            Button { timer.stopFocus() } label: { Label("Stop Focus", systemImage: "stop.fill") }
         case .focusEnded:
             if timer.isLongBreak {
-                Button("Start Long Break") { timer.startBreak() }
+                Button { timer.startBreak() } label: { Label("Start Long Break", systemImage: "cup.and.heat.waves.fill") }
             } else {
-                Button("Start Break") { timer.startBreak() }
+                Button { timer.startBreak() } label: { Label("Start Break", systemImage: "cup.and.heat.waves.fill") }
             }
-            Button("Skip") { timer.skipBreak() }
+            Button { timer.skipBreak() } label: { Label("Skip", systemImage: "forward.end.fill") }
         case .breaking:
             if timer.isPaused {
-                Button("Resume") { timer.resume() }
+                Button { timer.resume() } label: { Label("Resume", systemImage: "play.fill") }
             } else {
-                Button("Pause") { timer.pause() }
+                Button { timer.pause() } label: { Label("Pause", systemImage: "pause.fill") }
             }
-            Button("Skip") { timer.skipBreak() }
+            Button { timer.skipBreak() } label: { Label("Skip", systemImage: "forward.end.fill") }
         case .breakEnded:
-            Button("Start Focus") { timer.startFocus() }
+            Button { timer.startFocus() } label: { Label("Start Focus", systemImage: "play.fill") }
         }
 
         if timer.completedSessions > 0 {
             Divider()
-            Text("Sessions: \(timer.completedSessions)")
-                .disabled(true)
+            Label("Sessions: \(timer.completedSessions)", systemImage: "checkmark.circle")
         }
 
         Divider()
@@ -174,9 +173,7 @@ private struct MenuContent: View {
 
         Divider()
 
-        Button("Quit znueni") {
-            NSApplication.shared.terminate(nil)
-        }
-        .keyboardShortcut("q")
+        Button { NSApplication.shared.terminate(nil) } label: { Label("Quit znueni", systemImage: "xmark.circle") }
+            .keyboardShortcut("q")
     }
 }
