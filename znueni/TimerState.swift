@@ -15,8 +15,13 @@ func formatTime(_ seconds: Int) -> String {
 @Observable
 @MainActor
 class TimerState {
+    #if DEBUG
     static let focusOptions = [1, 15, 25, 30, 45, 60]
     static let breakOptions = [1, 3, 5, 10, 15]
+    #else
+    static let focusOptions = [15, 25, 30, 45, 60]
+    static let breakOptions = [3, 5, 10, 15]
+    #endif
 
     private enum Keys {
         static let focusDuration = "focusDuration"
