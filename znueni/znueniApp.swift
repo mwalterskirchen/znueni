@@ -107,7 +107,8 @@ struct znueniApp: App {
             } else {
                 Image(nsImage: makeMenuBarImage(
                     progress: timer.progress,
-                    text: timer.menuBarTitle
+                    text: timer.menuBarTitle,
+                    isPaused: timer.isPaused
                 ))
             }
         }
@@ -118,7 +119,7 @@ struct znueniApp: App {
         TimerState.requestNotificationPermission()
     }
 
-    private func makeMenuBarImage(progress: Double, text: String) -> NSImage {
+    private func makeMenuBarImage(progress: Double, text: String, isPaused: Bool) -> NSImage {
         let fontSize: CGFloat = 12
         let font = NSFont.monospacedDigitSystemFont(ofSize: fontSize, weight: .medium)
         let attrs: [NSAttributedString.Key: Any] = [.font: font]
@@ -127,34 +128,45 @@ struct znueniApp: App {
         let arcDiameter: CGFloat = 16
         let spacing: CGFloat = 4
         let height: CGFloat = 18
-        let width = arcDiameter + spacing + textSize.width + 2
+
+        let pauseIcon = isPaused
+            ? NSImage(systemSymbolName: "pause.fill", accessibilityDescription: "Paused")?
+                .withSymbolConfiguration(.init(pointSize: fontSize, weight: .medium))
+            : nil
+        let leadingWidth = pauseIcon?.size.width ?? arcDiameter
+
+        let width = leadingWidth + spacing + textSize.width + 2
 
         let image = NSImage(size: NSSize(width: width, height: height), flipped: false) { rect in
-            // Arc
-            let arcCenter = CGPoint(x: arcDiameter / 2, y: rect.midY)
-            let radius = arcDiameter / 2 - 1.5
-            let startAngle: CGFloat = 90
-            let endAngle = 90 - CGFloat(progress) * 360
+            if let pauseIcon {
+                // Pause icon
+                let iconY = (height - pauseIcon.size.height) / 2
+                pauseIcon.draw(in: CGRect(x: 0, y: iconY, width: pauseIcon.size.width, height: pauseIcon.size.height))
+            } else {
+                // Arc
+                let arcCenter = CGPoint(x: arcDiameter / 2, y: rect.midY)
+                let radius = arcDiameter / 2 - 1.5
+                let startAngle: CGFloat = 90
+                let endAngle = 90 - CGFloat(progress) * 360
 
-            // Track
-            let track = NSBezierPath()
-            track.appendArc(withCenter: arcCenter, radius: radius, startAngle: 0, endAngle: 360)
-            NSColor.labelColor.withAlphaComponent(0.2).setStroke()
-            track.lineWidth = 2
-            track.stroke()
+                let track = NSBezierPath()
+                track.appendArc(withCenter: arcCenter, radius: radius, startAngle: 0, endAngle: 360)
+                NSColor.labelColor.withAlphaComponent(0.2).setStroke()
+                track.lineWidth = 2
+                track.stroke()
 
-            // Progress arc
-            if progress > 0 {
-                let arc = NSBezierPath()
-                arc.appendArc(withCenter: arcCenter, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
-                NSColor.labelColor.setStroke()
-                arc.lineWidth = 2
-                arc.lineCapStyle = .round
-                arc.stroke()
+                if progress > 0 {
+                    let arc = NSBezierPath()
+                    arc.appendArc(withCenter: arcCenter, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+                    NSColor.labelColor.setStroke()
+                    arc.lineWidth = 2
+                    arc.lineCapStyle = .round
+                    arc.stroke()
+                }
             }
 
             // Text
-            let textOrigin = CGPoint(x: arcDiameter + spacing, y: (height - textSize.height) / 2)
+            let textOrigin = CGPoint(x: leadingWidth + spacing, y: (height - textSize.height) / 2)
             (text as NSString).draw(at: textOrigin, withAttributes: [
                 .font: font,
                 .foregroundColor: NSColor.labelColor

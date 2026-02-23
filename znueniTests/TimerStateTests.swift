@@ -216,15 +216,7 @@ final class TimerStateTests: XCTestCase {
 
     func testMenuBarTitleFocus() {
         sut.startFocus()
-        let title = sut.menuBarTitle
-        XCTAssertFalse(title.hasPrefix("⏸"))
-        XCTAssertTrue(title.contains(":"))
-    }
-
-    func testMenuBarTitlePaused() {
-        sut.startFocus()
-        sut.pause()
-        XCTAssertTrue(sut.menuBarTitle.hasPrefix("⏸"))
+        XCTAssertTrue(sut.menuBarTitle.contains(":"))
     }
 
     func testMenuBarTitleFocusEnded() {

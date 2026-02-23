@@ -138,10 +138,9 @@ class TimerState {
     }
 
     var menuBarTitle: String {
-        let prefix = isPaused ? "⏸ " : ""
         switch phase {
         case .idle: return "znueni"
-        case .focus, .breaking: return "\(prefix)\(formatTime(remainingSeconds))"
+        case .focus, .breaking: return formatTime(remainingSeconds)
         case .focusEnded: return "Break?"
         case .breakEnded: return "Done!"
         }
@@ -201,12 +200,14 @@ class TimerState {
 
     private func startTicking() {
         timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+        let t = Timer(timeInterval: 1, repeats: true) { [weak self] _ in
             guard let self else { return }
             Task { @MainActor in
                 self.tick()
             }
         }
+        RunLoop.main.add(t, forMode: .common)
+        timer = t
     }
 
     private func stopTicking() {
