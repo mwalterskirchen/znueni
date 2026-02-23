@@ -13,18 +13,49 @@ class TimerState {
     var remainingSeconds: Int = 0
 
     var focusDuration: Int {
-        get { UserDefaults.standard.integer(forKey: "focusDuration").clamped(min: 1, fallback: 25) }
-        set { UserDefaults.standard.set(newValue, forKey: "focusDuration") }
+        get {
+            access(keyPath: \.focusDuration)
+            return UserDefaults.standard.integer(forKey: "focusDuration").clamped(min: 1, fallback: 25)
+        }
+        set {
+            withMutation(keyPath: \.focusDuration) {
+                UserDefaults.standard.set(newValue, forKey: "focusDuration")
+            }
+        }
     }
 
     var breakDuration: Int {
-        get { UserDefaults.standard.integer(forKey: "breakDuration").clamped(min: 1, fallback: 5) }
-        set { UserDefaults.standard.set(newValue, forKey: "breakDuration") }
+        get {
+            access(keyPath: \.breakDuration)
+            return UserDefaults.standard.integer(forKey: "breakDuration").clamped(min: 1, fallback: 5)
+        }
+        set {
+            withMutation(keyPath: \.breakDuration) {
+                UserDefaults.standard.set(newValue, forKey: "breakDuration")
+            }
+        }
     }
 
     var autoStartBreak: Bool {
-        get { UserDefaults.standard.object(forKey: "autoStartBreak") as? Bool ?? true }
-        set { UserDefaults.standard.set(newValue, forKey: "autoStartBreak") }
+        get {
+            access(keyPath: \.autoStartBreak)
+            return UserDefaults.standard.object(forKey: "autoStartBreak") as? Bool ?? true
+        }
+        set {
+            withMutation(keyPath: \.autoStartBreak) {
+                UserDefaults.standard.set(newValue, forKey: "autoStartBreak")
+            }
+        }
+    }
+
+    var statusText: String {
+        switch phase {
+        case .idle: "Ready"
+        case .focus: "Focus — \(formatTime(remainingSeconds))"
+        case .focusEnded: "Focus complete!"
+        case .breaking: "Break — \(formatTime(remainingSeconds))"
+        case .breakEnded: "Break over!"
+        }
     }
 
     var menuBarTitle: String {
@@ -70,8 +101,9 @@ class TimerState {
     private func startTicking() {
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            guard let self else { return }
             Task { @MainActor in
-                self?.tick()
+                self.tick()
             }
         }
     }
