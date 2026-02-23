@@ -1,14 +1,25 @@
 # <img src="znueni/Assets.xcassets/AppIcon.appiconset/icon_64x64.png" width="32" alt="znueni app icon"> znueni
 
-A minimal macOS menu bar Pomodoro timer. Named after the Swiss German tradition of _Znüni_ — a mid-morning break to recharge.
+A minimal macOS menu bar Pomodoro timer. Free, open source, and lightweight with zero dependencies in just ~500 lines of Swift.
+
+Named after the Swiss German tradition of _Znüni_, a mid-morning break to recharge.
 
 ## Features
 
-- **Menu bar native** — lives in your status bar, no dock icon, no windows
-- **Focus + break cycles** — configurable durations (15–60 min focus, 3–15 min break)
-- **Full-screen break overlay** — covers all displays to enforce breaks, dismiss with Escape
-- **Auto-start breaks** — optionally transitions straight from focus to break
-- **System notifications** — alerts when sessions end, with sound cues
+- **Menu bar native** - lives in your status bar with a progress arc, no dock icon, no windows
+- **Focus + break cycles** - configurable durations (15-60 min focus, 3-15 min break)
+- **Pause / resume** - pause and resume during focus or break
+- **Long breaks** - automatic long break after N sessions (configurable)
+- **Session tracking** - counts completed focus sessions, persisted across restarts
+- **Full-screen break overlay** - covers all displays to enforce breaks, dismiss with Escape
+- **Auto-start breaks** - optionally transitions straight from focus to break
+- **System notifications** - alerts when sessions end, with sound cues
+
+## Why znueni?
+
+- **Zero dependencies** - built entirely on Apple frameworks (SwiftUI, AppKit, Foundation)
+- **Lightweight** - tiny memory footprint, no background services, no Electron
+- **Free & open source** - MIT licensed, no accounts, no telemetry, no ads
 
 ## Install
 
@@ -22,18 +33,16 @@ brew install mwalterskirchen/tap/znueni
 
 ## Architecture
 
-~350 lines of Swift across 4 files — SwiftUI for the menu and overlay UI, AppKit for multi-monitor window management.
+~500 lines of Swift across 4 files. SwiftUI for the menu and overlay UI, AppKit for multi-monitor window management.
 
 | File                           | Role                                                               |
 | ------------------------------ | ------------------------------------------------------------------ |
-| `znueniApp.swift`              | `MenuBarExtra` entry point, settings UI                            |
+| `znueniApp.swift`              | `MenuBarExtra` entry point, settings UI, progress arc rendering    |
 | `TimerState.swift`             | `@Observable` state machine, timer logic, UserDefaults persistence |
 | `BreakOverlayController.swift` | Full-screen `NSWindow` management across all displays              |
 | `BreakOverlayView.swift`       | Break countdown overlay view                                       |
 
 State flow: `idle → focus → focusEnded → breaking → breakEnded → idle`
-
-No external dependencies — only Foundation, SwiftUI, AppKit, and UserNotifications.
 
 ## Build
 
