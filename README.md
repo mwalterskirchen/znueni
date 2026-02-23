@@ -1,6 +1,6 @@
-# znueni
+# znueni ⏲️🇨🇭🥐
 
-A minimal macOS menu bar Pomodoro timer. Named after the Swiss German tradition of *Znüni* — a mid-morning break to recharge.
+A minimal macOS menu bar Pomodoro timer. Named after the Swiss German tradition of _Znüni_ — a mid-morning break to recharge.
 
 ## Features
 
@@ -14,12 +14,12 @@ A minimal macOS menu bar Pomodoro timer. Named after the Swiss German tradition 
 
 ~350 lines of Swift across 4 files — SwiftUI for the menu and overlay UI, AppKit for multi-monitor window management.
 
-| File | Role |
-|------|------|
-| `znueniApp.swift` | `MenuBarExtra` entry point, settings UI |
-| `TimerState.swift` | `@Observable` state machine, timer logic, UserDefaults persistence |
-| `BreakOverlayController.swift` | Full-screen `NSWindow` management across all displays |
-| `BreakOverlayView.swift` | Break countdown overlay view |
+| File                           | Role                                                               |
+| ------------------------------ | ------------------------------------------------------------------ |
+| `znueniApp.swift`              | `MenuBarExtra` entry point, settings UI                            |
+| `TimerState.swift`             | `@Observable` state machine, timer logic, UserDefaults persistence |
+| `BreakOverlayController.swift` | Full-screen `NSWindow` management across all displays              |
+| `BreakOverlayView.swift`       | Break countdown overlay view                                       |
 
 State flow: `idle → focus → focusEnded → breaking → breakEnded → idle`
 
