@@ -30,7 +30,7 @@ struct znueniApp: App {
 
             Menu("Settings") {
                 Menu("Focus: \(timer.focusDuration) min") {
-                    ForEach([1, 15, 25, 30, 45, 60], id: \.self) { mins in
+                    ForEach(TimerState.focusOptions, id: \.self) { mins in
                         Toggle("\(mins) min", isOn: Binding(
                             get: { timer.focusDuration == mins },
                             set: { if $0 { timer.focusDuration = mins } }
@@ -38,7 +38,7 @@ struct znueniApp: App {
                     }
                 }
                 Menu("Break: \(timer.breakDuration) min") {
-                    ForEach([1, 3, 5, 10, 15], id: \.self) { mins in
+                    ForEach(TimerState.breakOptions, id: \.self) { mins in
                         Toggle("\(mins) min", isOn: Binding(
                             get: { timer.breakDuration == mins },
                             set: { if $0 { timer.breakDuration = mins } }

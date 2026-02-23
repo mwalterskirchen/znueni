@@ -24,10 +24,4 @@ struct BreakOverlayView: View {
         }
         .ignoresSafeArea()
     }
-
-    private func formatTime(_ seconds: Int) -> String {
-        let m = seconds / 60
-        let s = seconds % 60
-        return String(format: "%d:%02d", m, s)
-    }
 }

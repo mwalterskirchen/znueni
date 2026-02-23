@@ -6,20 +6,35 @@ enum TimerPhase {
     case idle, focus, focusEnded, breaking, breakEnded
 }
 
+func formatTime(_ seconds: Int) -> String {
+    let m = seconds / 60
+    let s = seconds % 60
+    return String(format: "%d:%02d", m, s)
+}
+
 @Observable
 @MainActor
 class TimerState {
+    static let focusOptions = [1, 15, 25, 30, 45, 60]
+    static let breakOptions = [1, 3, 5, 10, 15]
+
+    private enum Keys {
+        static let focusDuration = "focusDuration"
+        static let breakDuration = "breakDuration"
+        static let autoStartBreak = "autoStartBreak"
+    }
+
     var phase: TimerPhase = .idle
     var remainingSeconds: Int = 0
 
     var focusDuration: Int {
         get {
             access(keyPath: \.focusDuration)
-            return UserDefaults.standard.integer(forKey: "focusDuration").clamped(min: 1, fallback: 25)
+            return UserDefaults.standard.integer(forKey: Keys.focusDuration).clamped(min: 1, fallback: 25)
         }
         set {
             withMutation(keyPath: \.focusDuration) {
-                UserDefaults.standard.set(newValue, forKey: "focusDuration")
+                UserDefaults.standard.set(newValue, forKey: Keys.focusDuration)
             }
         }
     }
@@ -27,11 +42,11 @@ class TimerState {
     var breakDuration: Int {
         get {
             access(keyPath: \.breakDuration)
-            return UserDefaults.standard.integer(forKey: "breakDuration").clamped(min: 1, fallback: 5)
+            return UserDefaults.standard.integer(forKey: Keys.breakDuration).clamped(min: 1, fallback: 5)
         }
         set {
             withMutation(keyPath: \.breakDuration) {
-                UserDefaults.standard.set(newValue, forKey: "breakDuration")
+                UserDefaults.standard.set(newValue, forKey: Keys.breakDuration)
             }
         }
     }
@@ -39,11 +54,11 @@ class TimerState {
     var autoStartBreak: Bool {
         get {
             access(keyPath: \.autoStartBreak)
-            return UserDefaults.standard.object(forKey: "autoStartBreak") as? Bool ?? true
+            return UserDefaults.standard.object(forKey: Keys.autoStartBreak) as? Bool ?? true
         }
         set {
             withMutation(keyPath: \.autoStartBreak) {
-                UserDefaults.standard.set(newValue, forKey: "autoStartBreak")
+                UserDefaults.standard.set(newValue, forKey: Keys.autoStartBreak)
             }
         }
     }
@@ -136,12 +151,6 @@ class TimerState {
                 break
             }
         }
-    }
-
-    private func formatTime(_ seconds: Int) -> String {
-        let m = seconds / 60
-        let s = seconds % 60
-        return String(format: "%d:%02d", m, s)
     }
 
     private func sendNotification(title: String, body: String) {
