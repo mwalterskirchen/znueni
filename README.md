@@ -1,8 +1,8 @@
 # <img src="znueni/Assets.xcassets/AppIcon.appiconset/icon_64x64.png" width="32" alt="znueni app icon"> znueni
 
-A minimal macOS menu bar Pomodoro timer. Free, open source, and lightweight with zero dependencies in just ~500 lines of Swift.
+A minimal macOS menu bar Pomodoro timer. Free, open source, and lightweight with zero dependencies in just a few hundred lines of Swift.
 
-Named after the Swiss German tradition of _Znüni_, a mid-morning break to recharge.
+Named after _Znüni_ (sounds like "tsnoo-nee"), a Swiss German tradition of taking a small snack break around 9 AM — literally "at nine o'clock".
 
 ## Features
 
@@ -10,7 +10,7 @@ Named after the Swiss German tradition of _Znüni_, a mid-morning break to recha
 - **Focus + break cycles** - configurable durations (15-60 min focus, 3-15 min break)
 - **Pause / resume** - pause and resume during focus or break
 - **Long breaks** - automatic long break after N sessions (configurable)
-- **Session tracking** - counts completed focus sessions, persisted across restarts
+- **Session tracking** - counts completed focus sessions, resets each launch
 - **Full-screen break overlay** - covers all displays to enforce breaks, dismiss with Escape
 - **Auto-start breaks** - optionally transitions straight from focus to break
 - **System notifications** - alerts when sessions end, with sound cues
@@ -33,7 +33,7 @@ brew install mwalterskirchen/tap/znueni
 
 ## Architecture
 
-~500 lines of Swift across 4 files. SwiftUI for the menu and overlay UI, AppKit for multi-monitor window management.
+a few hundred lines of Swift across 4 files. SwiftUI for the menu and overlay UI, AppKit for multi-monitor window management.
 
 | File                           | Role                                                               |
 | ------------------------------ | ------------------------------------------------------------------ |
