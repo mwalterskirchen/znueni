@@ -1,9 +1,11 @@
 import SwiftUI
 import AppKit
+import ServiceManagement
 
 @main
 struct znueniApp: App {
     @State private var timer = TimerState()
+    @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
 
     var body: some Scene {
         MenuBarExtra {
@@ -84,6 +86,13 @@ struct znueniApp: App {
                     }
                 }
                 Toggle("Auto-start break", isOn: Bindable(timer).autoStartBreak)
+                Toggle("Launch at login", isOn: Binding(
+                    get: { launchAtLogin },
+                    set: { newValue in
+                        try? newValue ? SMAppService.mainApp.register() : SMAppService.mainApp.unregister()
+                        launchAtLogin = SMAppService.mainApp.status == .enabled
+                    }
+                ))
             }
 
             Divider()
