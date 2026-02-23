@@ -1,17 +1,19 @@
-//
-//  znueniApp.swift
-//  znueni
-//
-//  Created by Maximilian Walterskirchen on 23.02.2026.
-//
-
 import SwiftUI
 
 @main
 struct znueniApp: App {
+    @State private var timer = TimerState()
+
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        MenuBarExtra {
+            MenuBarView(timer: timer)
+        } label: {
+            Text(timer.menuBarTitle)
         }
+        .menuBarExtraStyle(.window)
+    }
+
+    init() {
+        TimerState.requestNotificationPermission()
     }
 }
