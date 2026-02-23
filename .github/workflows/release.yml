@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build archive
+        run: xcodebuild -scheme znueni -configuration Release archive -archivePath build/znueni.xcarchive
+
+      - name: Export app
+        run: xcodebuild -exportArchive -archivePath build/znueni.xcarchive -exportPath build/ -exportOptionsPlist ExportOptions.plist
+
+      - name: Create DMG
+        run: hdiutil create -volname znueni -srcfolder build/znueni.app -ov -format UDZO znueni.dmg
+
+      - name: Create GitHub release
+        run: gh release create "$GITHUB_REF_NAME" znueni.dmg --title "znueni $GITHUB_REF_NAME" --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Homebrew tap
+        env:
+          TAP_TOKEN: ${{ secrets.TAP_TOKEN }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          VERSION="${REF_NAME#v}"
+          SHA=$(shasum -a 256 znueni.dmg | awk '{print $1}')
+          git clone "https://x-access-token:${TAP_TOKEN}@github.com/mwalterskirchen/homebrew-tap.git" tap
+          cd tap
+          sed -i '' "s/version \".*\"/version \"${VERSION}\"/" Casks/znueni.rb
+          sed -i '' "s/sha256 \".*\"/sha256 \"${SHA}\"/" Casks/znueni.rb
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add Casks/znueni.rb
+          git commit -m "update znueni to ${VERSION}"
+          git push
