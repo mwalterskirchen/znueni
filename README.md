@@ -10,6 +10,16 @@ A minimal macOS menu bar Pomodoro timer. Named after the Swiss German tradition 
 - **Auto-start breaks** — optionally transitions straight from focus to break
 - **System notifications** — alerts when sessions end, with sound cues
 
+## Install
+
+**Homebrew:**
+
+```bash
+brew install mwalterskirchen/tap/znueni
+```
+
+**Manual:** Download the latest `.dmg` from [Releases](https://github.com/mwalterskirchen/znueni/releases), open it, and drag znueni to Applications. On first launch, right-click → Open to bypass Gatekeeper.
+
 ## Architecture
 
 ~350 lines of Swift across 4 files — SwiftUI for the menu and overlay UI, AppKit for multi-monitor window management.
