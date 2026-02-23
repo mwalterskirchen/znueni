@@ -30,12 +30,13 @@ private struct MenuBarLabel: View {
             Image(nsImage: makeMenuBarImage(
                 progress: timer.progress,
                 text: timer.menuBarTitle,
-                isPaused: timer.isPaused
+                isPaused: timer.isPaused,
+                phase: timer.phase
             ))
         }
     }
 
-    private func makeMenuBarImage(progress: Double, text: String, isPaused: Bool) -> NSImage {
+    private func makeMenuBarImage(progress: Double, text: String, isPaused: Bool, phase: TimerPhase) -> NSImage {
         let fontSize: CGFloat = 12
         let font = NSFont.monospacedDigitSystemFont(ofSize: fontSize, weight: .medium)
         let attrs: [NSAttributedString.Key: Any] = [.font: font]
@@ -45,18 +46,23 @@ private struct MenuBarLabel: View {
         let spacing: CGFloat = 4
         let height: CGFloat = 18
 
-        let pauseIcon = isPaused
-            ? NSImage(systemSymbolName: "pause.fill", accessibilityDescription: "Paused")?
+        let leadingIcon: NSImage? = if isPaused {
+            NSImage(systemSymbolName: "pause.fill", accessibilityDescription: "Paused")?
                 .withSymbolConfiguration(.init(pointSize: fontSize, weight: .medium))
-            : nil
-        let leadingWidth = pauseIcon?.size.width ?? arcDiameter
+        } else if phase == .breaking {
+            NSImage(systemSymbolName: "cup.and.heat.waves", accessibilityDescription: "Break")?
+                .withSymbolConfiguration(.init(pointSize: fontSize, weight: .medium))
+        } else {
+            nil
+        }
+        let leadingWidth = leadingIcon?.size.width ?? arcDiameter
 
         let width = leadingWidth + spacing + textSize.width + 2
 
         let image = NSImage(size: NSSize(width: width, height: height), flipped: false) { rect in
-            if let pauseIcon {
-                let iconY = (height - pauseIcon.size.height) / 2
-                pauseIcon.draw(in: CGRect(x: 0, y: iconY, width: pauseIcon.size.width, height: pauseIcon.size.height))
+            if let leadingIcon {
+                let iconY = (height - leadingIcon.size.height) / 2
+                leadingIcon.draw(in: CGRect(x: 0, y: iconY, width: leadingIcon.size.width, height: leadingIcon.size.height))
             } else {
                 let arcCenter = CGPoint(x: arcDiameter / 2, y: rect.midY)
                 let radius = arcDiameter / 2 - 1.5
