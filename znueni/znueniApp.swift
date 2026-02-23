@@ -103,7 +103,19 @@ private struct MenuContent: View {
     let timer: TimerState
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
 
+    private var stateLabel: String {
+        switch timer.phase {
+        case .idle: "Idle"
+        case .focus: timer.isPaused ? "Focus · Paused" : "Focus"
+        case .focusEnded: "Focus"
+        case .breaking: timer.isPaused ? "Break · Paused" : "Break"
+        case .breakEnded: "Break"
+        }
+    }
+
     var body: some View {
+        Text(stateLabel).disabled(true)
+        Divider()
         switch timer.phase {
         case .idle:
             Button("Start Focus") { timer.startFocus() }
