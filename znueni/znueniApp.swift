@@ -149,7 +149,6 @@ private struct MenuContent: View {
             Divider()
             Text("Sessions: \(timer.completedSessions)")
                 .disabled(true)
-            Button("Reset Sessions") { timer.resetSessions() }
         }
 
         Divider()

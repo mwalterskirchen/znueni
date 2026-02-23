@@ -35,7 +35,6 @@ class TimerState {
         static let focusDuration = "focusDuration"
         static let breakDuration = "breakDuration"
         static let autoStartNext = "autoStartNext"
-        static let completedSessions = "completedSessions"
         static let longBreakDuration = "longBreakDuration"
         static let sessionsUntilLongBreak = "sessionsUntilLongBreak"
     }
@@ -81,17 +80,7 @@ class TimerState {
         }
     }
 
-    var completedSessions: Int {
-        get {
-            access(keyPath: \.completedSessions)
-            return defaults.integer(forKey: Keys.completedSessions)
-        }
-        set {
-            withMutation(keyPath: \.completedSessions) {
-                defaults.set(newValue, forKey: Keys.completedSessions)
-            }
-        }
-    }
+    var completedSessions: Int = 0
 
     var longBreakDuration: Int {
         get {
@@ -210,10 +199,6 @@ class TimerState {
     func resume() {
         isPaused = false
         startTicking()
-    }
-
-    func resetSessions() {
-        completedSessions = 0
     }
 
     private func startTicking() {
