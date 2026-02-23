@@ -18,17 +18,25 @@ No tests exist. No linter configured.
 
 Menu bar-only app (LSUIElement, no main window). 4 source files in `znueni/`:
 
-- **znueniApp.swift** — `@main` entry, `MenuBarExtra` with `.menu` style, settings submenus
-- **TimerState.swift** — `@Observable @MainActor` state machine, timer logic, UserDefaults persistence, notifications
+- **znueniApp.swift** — `@main` entry, `MenuBarExtra` with `.menu` style, settings submenus, CoreGraphics progress arc rendering
+- **TimerState.swift** — `@Observable @MainActor` state machine, timer logic, UserDefaults persistence, notifications, pause/resume, session tracking
 - **BreakOverlayController.swift** — AppKit `NSWindow` manager, full-screen overlay on all displays
-- **BreakOverlayView.swift** — SwiftUI view hosted in overlay via `NSHostingView`
+- **BreakOverlayView.swift** — SwiftUI view hosted in overlay via `NSHostingView`, long break variant
 
-State flow: `idle → focus → focusEnded → breaking → breakEnded → idle`
+State flow: `idle → focus → focusEnded → breaking → breakEnded → idle` (focus/breaking support pause/resume)
+
+## Features
+
+- Pause/resume during focus and break phases
+- Session counter (UserDefaults-persisted) with reset
+- Long break after N sessions (configurable duration + interval)
+- Progress arc + time text in menu bar (CoreGraphics template NSImage)
 
 ## Patterns
 
-- Settings (focusDuration, breakDuration, autoStartBreak) use UserDefaults with Observable `access()`/`withMutation()` wrappers
+- Settings (focusDuration, breakDuration, longBreakDuration, sessionsUntilLongBreak, autoStartBreak) use UserDefaults with Observable `access()`/`withMutation()` wrappers
 - DEBUG builds include 1-min durations for testing; RELEASE starts at 15 min
 - `formatTime()` is a top-level function in TimerState.swift (shared by overlay view)
 - `Int.clamped(min:fallback:)` private extension for safe UserDefaults reads
-- Hybrid SwiftUI/AppKit: SwiftUI for menu + overlay view, AppKit for window management + sound + event monitoring
+- Hybrid SwiftUI/AppKit: SwiftUI for menu + overlay view, AppKit for window management + sound
+- Menu bar label: `Image("croissant")` when idle, `makeMenuBarImage()` NSImage with arc + text when active
