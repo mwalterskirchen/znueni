@@ -1,6 +1,5 @@
 import SwiftUI
 import AppKit
-import ServiceManagement
 
 @main
 struct znueniApp: App {
@@ -13,6 +12,13 @@ struct znueniApp: App {
             MenuBarLabel(timer: timer)
         }
         .menuBarExtraStyle(.menu)
+
+        Window("Settings", id: "settings") {
+            SettingsView(timer: timer)
+        }
+        .windowResizability(.contentSize)
+        .defaultPosition(.center)
+        .restorationBehavior(.disabled)
     }
 
     init() {
@@ -99,9 +105,20 @@ private struct MenuBarLabel: View {
     }
 }
 
+private struct SettingsButton: View {
+    @Environment(\.openWindow) private var openWindow
+
+    var body: some View {
+        Button("Settings…") {
+            openWindow(id: "settings")
+            NSApp.activate(ignoringOtherApps: true)
+        }
+        .keyboardShortcut(",")
+    }
+}
+
 private struct MenuContent: View {
     let timer: TimerState
-    @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
 
     private var stateLabel: String {
         switch timer.phase {
@@ -153,48 +170,7 @@ private struct MenuContent: View {
 
         Divider()
 
-        Menu("Settings") {
-            Menu("Focus: \(timer.focusDuration) min") {
-                ForEach(TimerState.focusOptions, id: \.self) { mins in
-                    Toggle("\(mins) min", isOn: Binding(
-                        get: { timer.focusDuration == mins },
-                        set: { if $0 { timer.focusDuration = mins } }
-                    ))
-                }
-            }
-            Menu("Break: \(timer.breakDuration) min") {
-                ForEach(TimerState.breakOptions, id: \.self) { mins in
-                    Toggle("\(mins) min", isOn: Binding(
-                        get: { timer.breakDuration == mins },
-                        set: { if $0 { timer.breakDuration = mins } }
-                    ))
-                }
-            }
-            Menu("Long Break: \(timer.longBreakDuration) min") {
-                ForEach(TimerState.longBreakOptions, id: \.self) { mins in
-                    Toggle("\(mins) min", isOn: Binding(
-                        get: { timer.longBreakDuration == mins },
-                        set: { if $0 { timer.longBreakDuration = mins } }
-                    ))
-                }
-            }
-            Menu("Long Break Every: \(timer.sessionsUntilLongBreak)") {
-                ForEach(TimerState.sessionsUntilLongBreakOptions, id: \.self) { n in
-                    Toggle("\(n) sessions", isOn: Binding(
-                        get: { timer.sessionsUntilLongBreak == n },
-                        set: { if $0 { timer.sessionsUntilLongBreak = n } }
-                    ))
-                }
-            }
-            Toggle("Auto-start next session", isOn: Bindable(timer).autoStartNext)
-            Toggle("Launch at login", isOn: Binding(
-                get: { launchAtLogin },
-                set: { newValue in
-                    try? newValue ? SMAppService.mainApp.register() : SMAppService.mainApp.unregister()
-                    launchAtLogin = SMAppService.mainApp.status == .enabled
-                }
-            ))
-        }
+        SettingsButton()
 
         Divider()
 

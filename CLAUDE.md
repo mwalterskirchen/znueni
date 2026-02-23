@@ -16,10 +16,11 @@ No tests exist. No linter configured.
 
 ## Architecture
 
-Menu bar-only app (LSUIElement, no main window). 4 source files in `znueni/`:
+Menu bar-only app (LSUIElement, no main window). 5 source files in `znueni/`:
 
-- **znueniApp.swift** — `@main` entry, `MenuBarExtra` with `.menu` style, settings submenus, CoreGraphics progress arc rendering
+- **znueniApp.swift** — `@main` entry, `MenuBarExtra` with `.menu` style, `Window` scene for settings, CoreGraphics progress arc rendering
 - **TimerState.swift** — `@Observable @MainActor` state machine, timer logic, UserDefaults persistence, notifications, pause/resume, session tracking
+- **SettingsView.swift** — standalone settings window (durations, behavior, about/version), dock icon management via activation policy
 - **BreakOverlayController.swift** — AppKit `NSWindow` manager, full-screen overlay on all displays
 - **BreakOverlayView.swift** — SwiftUI view hosted in overlay via `NSHostingView`, long break variant
 
