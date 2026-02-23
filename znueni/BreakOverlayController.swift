@@ -22,7 +22,6 @@ class BreakOverlayController {
             window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
 
             let overlayView = BreakOverlayView(timer: timer) { [weak self] in
-                timer.endBreak()
                 self?.dismiss()
             }
             window.contentView = NSHostingView(rootView: overlayView)
@@ -33,7 +32,6 @@ class BreakOverlayController {
 
         eventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             if event.keyCode == 53 { // Escape
-                timer.endBreak()
                 self?.dismiss()
                 return nil
             }
